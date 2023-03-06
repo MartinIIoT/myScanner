@@ -11,10 +11,14 @@ usb_key = 0
 usb_path = "/dev/sda1"
 usb_file_path = "/home/pi/myScanner/myUSB/"
 usb_scanned = False
-update_time = 30 # in seconds
-update_time_temp = update_time
+update_refresh_time = 30 # in seconds
+update_time_temp = update_refresh_time
+start_update = 1800 # in seconds (1800s = 30min)
+
+
 
 def saveLastUpdate():
+    lcd.clear()
     with open('./last_update.conf', 'w') as f:
         lcd.print_line('SAVE LAST UPDATE', line=2, align='CENTER')
         dateTime_now = str(time.time())
@@ -22,14 +26,23 @@ def saveLastUpdate():
         lcd.clear()
 
 def readLastUpdate():
+    global start_update
+    global update_now
     with open('./last_update.conf', 'r') as f:
-        lcd.print_line('READ LAST UPDATE', line=2, align='CENTER')
+        update_now = False
         dateTime_old = float(f.read())
         dateTime_now = time.time()
-
+        if (dateTime_now - dateTime_old >= start_update):
+            update_now = True
+    
+    if update_now:
+        updateOS()
+        clamavUpdate()
+        saveLastUpdate()
 
 
 def clamavUpdate():
+    lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     lcd.print_line('STOP ClamAV', line=2, align='CENTER')
     subprocess.run(['sudo', 'systemctl', 'stop', 'clamav-freshclam'])
@@ -40,6 +53,7 @@ def clamavUpdate():
     lcd.clear()
 
 def updateOS():
+    lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     lcd.print_line('GET OS UPDATE', line=2, align='CENTER')
     subprocess.run(['sudo', 'apt', 'update'])
@@ -51,21 +65,12 @@ def updateOS():
     
 
 def updateMain():
-    lcd.clear()
-    lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
-
     try:
-        
         urllib.request.urlopen('https://google.com', timeout=5) #Python 3.x
-        lcd.print_line(':::  ONLINE  :::', line=2, align='CENTER')
-        lcd.print_line('UPDATING', line=3, align='CENTER')
         lcd.clear()
-        updateOS()
-        clamavUpdate()
-        saveLastUpdate()
+        readLastUpdate()
         return True
     except:
-        lcd.print_line('...  OFFLINE  ...', line=2, align='CENTER')
         time.sleep(1)
         lcd.clear()
         return False
@@ -98,6 +103,7 @@ def findUSB():
         return False
 
 def draw():
+    lcd.clear()
     lcd.print_line('===  MartinIIoT  ===', line=0, align='CENTER')
     lcd.move_cursor(1, 0)
     lcd.print("USB [ ]")
@@ -145,4 +151,4 @@ while True:
     else:
         updateMain()
         draw()
-        update_time_temp = update_time
+        update_time_temp = update_refresh_time
