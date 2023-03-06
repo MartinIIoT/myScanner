@@ -1,12 +1,22 @@
-import time
+import subprocess
+import pathlib
 
-with open('./last_update.conf', 'r') as f:
-        dateTime_old = float(f.read())
-        dateTime_now = time.time()
+usb_path = "/dev/sda1"
+usb_file_path = "/home/pi/myScanner/myUSB/"
+desktop = pathlib.Path(usb_file_path)
 
-        dateTime_delta = dateTime_now - dateTime_old
+suborov = 0
 
-        print(dateTime_old)
-        print(dateTime_now)
-        print(dateTime_delta)
+try:
+        subprocess.check_output("sudo mount " + usb_path + " " + usb_file_path, shell=True)
+        for item in desktop.iterdir():
+                if not(item.is_dir()):
+                        suborov += 1
+        try:
+                subprocess.check_output("sudo umount " + usb_file_path, shell=True)
+        except subprocess.CalledProcessError:
+                print("Unmount Err")
+except subprocess.CalledProcessError:
+        print("Mount Err")
 
+print(suborov)
