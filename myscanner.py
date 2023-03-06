@@ -14,6 +14,14 @@ usb_scanned = False
 update_time = 30 # in seconds
 update_time_temp = update_time
 
+def saveLastUpdate():
+    with open('./last_update.conf', 'w') as f:
+        lcd.print_line('SAVE LAST UPDATE', line=2, align='CENTER')
+        data = str(time.time())
+        f.write(data)
+        lcd.clear()
+
+
 def clamav_update():
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     lcd.print_line('STOP ClamAV', line=2, align='CENTER')
@@ -47,6 +55,7 @@ def update_main():
         lcd.clear()
         update_os()
         clamav_update()
+        saveLastUpdate()
         return True
     except:
         lcd.print_line('...  OFFLINE  ...', line=2, align='CENTER')

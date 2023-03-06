@@ -1,3 +1,6 @@
-import subprocess
+import time
 
-verzia_raw = subprocess.run(['sudo', 'apt', 'update'], stdout=subprocess.PIPE)
+with open('./last_update.conf', 'w') as f:
+        data = str(time.time())
+        f.write(data)
+        time.sleep(10)
