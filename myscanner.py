@@ -16,7 +16,7 @@ update_time_temp = update_time
 
 
 
-def update():
+def update_main():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     
@@ -80,7 +80,7 @@ def draw():
     lcd.move_cursor(3, 15)
     lcd.print(version_db)
 
-update()
+update_main()
 draw()
 
 while True:
@@ -107,6 +107,6 @@ while True:
         update_time_temp -= 1
         time.sleep(1)
     else:
-        update()
+        update_main()
         draw()
         update_time_temp = update_time
