@@ -28,7 +28,7 @@ def saveLastUpdate():
         lcd.clear()
 
 # Read last timestamp update.
-# If is more as start_update then start update.
+# If is more as start_update variable then start update.
 def readLastUpdate():
     global start_update
     global update_now
