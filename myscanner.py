@@ -29,7 +29,7 @@ def readLastUpdate():
 
 
 
-def clamav_update():
+def clamavUpdate():
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     lcd.print_line('STOP ClamAV', line=2, align='CENTER')
     subprocess.run(['sudo', 'systemctl', 'stop', 'clamav-freshclam'])
@@ -39,7 +39,7 @@ def clamav_update():
     subprocess.run(['sudo', 'systemctl', 'start', 'clamav-freshclam'])
     lcd.clear()
 
-def update_os():
+def updateOS():
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     lcd.print_line('GET OS UPDATE', line=2, align='CENTER')
     subprocess.run(['sudo', 'apt', 'update'])
@@ -50,7 +50,7 @@ def update_os():
     lcd.clear()
     
 
-def update_main():
+def updateMain():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
 
@@ -60,8 +60,8 @@ def update_main():
         lcd.print_line(':::  ONLINE  :::', line=2, align='CENTER')
         lcd.print_line('UPDATING', line=3, align='CENTER')
         lcd.clear()
-        update_os()
-        clamav_update()
+        updateOS()
+        clamavUpdate()
         saveLastUpdate()
         return True
     except:
@@ -71,7 +71,7 @@ def update_main():
         return False
 
 
-def find_usb():
+def findUSB():
     global usb_key
     global usb_scanned
 
@@ -116,12 +116,12 @@ def draw():
     lcd.move_cursor(3, 15)
     lcd.print(version_db)
 
-update_main()
+updateMain()
 draw()
 
 while True:
     if update_time_temp > 0:
-        if find_usb() and not(usb_scanned):
+        if findUSB() and not(usb_scanned):
             usb_scanned = True
             lcd.move_cursor(1, 12)
             lcd.print('SCAN [X]')
@@ -143,6 +143,6 @@ while True:
         update_time_temp -= 1
         time.sleep(1)
     else:
-        update_main()
+        updateMain()
         draw()
         update_time_temp = update_time
