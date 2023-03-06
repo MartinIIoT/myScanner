@@ -4,19 +4,21 @@ import urllib.request
 import time
 import os
 
+# LCD 20x4 Setup: 
+#   Address: 27 on I2C
+#   LCD_WIDTH: 20 for 20x4
 lcd = i2clcd.i2clcd(i2c_bus=1, i2c_addr=0x27, lcd_width=20)
 lcd.init()
 
 usb_key = 0
-usb_path = "/dev/sda1"
-usb_file_path = "/home/pi/myScanner/myUSB/"
+usb_path = "/dev/sda1" # Where is USB
+usb_file_path = "/home/pi/myScanner/myUSB/" # Mount point for USB
 usb_scanned = False
 update_refresh_time = 30 # in seconds
 update_time_temp = update_refresh_time
 start_update = 1800 # in seconds (1800s = 30min)
 
-
-
+# Save last update timestamp to last_update.conf
 def saveLastUpdate():
     lcd.clear()
     with open('./last_update.conf', 'w') as f:
@@ -25,6 +27,8 @@ def saveLastUpdate():
         f.write(dateTime_now)
         lcd.clear()
 
+# Read last timestamp update.
+# If is more as start_update then start update.
 def readLastUpdate():
     global start_update
     global update_now
@@ -40,7 +44,7 @@ def readLastUpdate():
         clamavUpdate()
         saveLastUpdate()
 
-
+# Update ClamAV definitions database
 def clamavUpdate():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
@@ -52,6 +56,7 @@ def clamavUpdate():
     subprocess.run(['sudo', 'systemctl', 'start', 'clamav-freshclam'])
     lcd.clear()
 
+# Update Ubuntu and clean Ubuntu after update
 def updateOS():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
@@ -63,7 +68,8 @@ def updateOS():
     subprocess.run(['sudo', 'apt', 'autoremove', '--purge', '-y'])
     lcd.clear()
     
-
+# Main update function.
+# Check if have internet connection and if yes, start readLastUpdate()
 def updateMain():
     try:
         urllib.request.urlopen('https://google.com', timeout=5) #Python 3.x
@@ -75,7 +81,7 @@ def updateMain():
         lcd.clear()
         return False
 
-
+# Check if is USB present and if yes, mount it to ./myUSB/
 def findUSB():
     global usb_key
     global usb_scanned
@@ -102,6 +108,7 @@ def findUSB():
         usb_scanned = False
         return False
 
+# Draw main screen with ClamAV Core and definitions database versions
 def draw():
     lcd.clear()
     lcd.print_line('===  MartinIIoT  ===', line=0, align='CENTER')
@@ -122,33 +129,35 @@ def draw():
     lcd.move_cursor(3, 15)
     lcd.print(version_db)
 
+# Initial run
 updateMain()
 draw()
 
+# Main loop for running program
 while True:
-    if update_time_temp > 0:
-        if findUSB() and not(usb_scanned):
-            usb_scanned = True
-            lcd.move_cursor(1, 12)
-            lcd.print('SCAN [X]')
-            lcd.print_line('SCANNING', line=2, align='CENTER')
-            subprocess.run(['clamscan', '-r', '-i', usb_file_path])
-            lcd.move_cursor(1, 12)
-            lcd.print('SCAN [ ]')
-            
-            if usb_key == 1:
-                try:
-                    subprocess.check_output("sudo umount " + usb_file_path, shell=True)
-                    print("Unmount OK")
-                except subprocess.CalledProcessError:
-                    print("Unmount Err")
+        if update_time_temp > 0:
+            if findUSB() and not(usb_scanned):
+                usb_scanned = True
+                lcd.move_cursor(1, 12)
+                lcd.print('SCAN [X]')
+                lcd.print_line('SCANNING', line=2, align='CENTER')
+                subprocess.run(['clamscan', '-r', '-i', usb_file_path])
+                lcd.move_cursor(1, 12)
+                lcd.print('SCAN [ ]')
+                
+                if usb_key == 1:
+                    try:
+                        subprocess.check_output("sudo umount " + usb_file_path, shell=True)
+                        print("Unmount OK")
+                    except subprocess.CalledProcessError:
+                        print("Unmount Err")
 
-            lcd.print_line('SCAN DONE!', line=2, align='CENTER')
-            time.sleep(5)
-            lcd.print_line('REMOVE USB', line=2, align='CENTER')
-        update_time_temp -= 1
-        time.sleep(1)
-    else:
-        updateMain()
-        draw()
-        update_time_temp = update_refresh_time
+                lcd.print_line('SCAN DONE!', line=2, align='CENTER')
+                time.sleep(5)
+                lcd.print_line('REMOVE USB', line=2, align='CENTER')
+            update_time_temp -= 1
+            time.sleep(1)
+        else:
+            updateMain()
+            draw()
+            update_time_temp = update_refresh_time
