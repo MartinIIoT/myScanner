@@ -3,8 +3,8 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-online_stav() {
-	echo "===  Overujem online stav  ==="
+check_status() {
+	echo "===  CHECK ONLINE  ==="
 	wget -q --spider https://google.com
 	if [ $? -eq 0 ];
 	then return 0;
@@ -14,46 +14,46 @@ online_stav() {
 	# 1 = false
 }
 
-stav_av() {
+status_av() {
 	if sudo systemctl is-active --quiet clamav-freshclam;
 	then echo -e "ClamAV Status: ${GREEN}Active${NC}";
 	else echo -e "ClamAV Status: ${RED}Inactive${NC}";
 	fi
 }
 
-spusti_aktualizaciu() {
+run_update() {
 	echo ""
-	echo "===  Preberám aktualizácie OS ==="
+	echo "===  OS Update ==="
 	sudo apt full-upgrade -y
 
 	echo ""
-	echo "===  Čistím OS  ==="
+	echo "===  Cleaning OS  ==="
 	sudo apt autoremove --purge -y
 }
 
-aktualizuj() {
-	echo "Stav: on-line"
+update() {
+	echo "Status: on-line"
 	echo ""
-	echo "===  Hľadám aktualizácie OS  ==="
+	echo "===  Search OS Updates  ==="
 	sudo apt update
 
-	spusti_aktualizaciu
+	run_update
 
 	echo ""
-	echo "===  Zastavujem ClamAV  ==="
+	echo "===  Stop ClamAV  ==="
 	sudo systemctl stop clamav-freshclam
-	stav_av
+	status_av
 
 	echo ""
-	echo "===  Aktualizujem ClamAV  ==="
+	echo "===  Update ClamAV  ==="
 	sudo freshclam
 
 	echo ""
-	echo "===  Spúšťam ClamAV  ==="
+	echo "===  Start ClamAV  ==="
 	sudo systemctl start clamav-freshclam
 	stav_av
 }
 
-if online_stav;
-then aktualizuj;
+if check_status;
+then update;
 fi

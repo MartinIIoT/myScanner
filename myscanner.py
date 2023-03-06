@@ -25,7 +25,7 @@ def update():
         urllib.request.urlopen('https://google.com', timeout=5) #Python 3.x
         lcd.print_line(':::  ONLINE  :::', line=2, align='CENTER')
         lcd.print_line('UPDATING', line=3, align='CENTER')
-        subprocess.run(['./aktualizuj.sh'])
+        subprocess.run(['./update.sh'])
         lcd.clear()
         return True
     except:
