@@ -68,17 +68,17 @@ def draw():
     lcd.move_cursor(1, 12)
     lcd.print('SCAN [ ]')
 
-    verzia_raw = subprocess.run(['clamscan', '--version'], stdout=subprocess.PIPE)
-    verzia_help = verzia_raw.stdout.decode('utf-8')
+    version_raw = subprocess.run(['clamscan', '--version'], stdout=subprocess.PIPE)
+    version_help = version_raw.stdout.decode('utf-8')
 
-    verzia_core = verzia_help[7:verzia_help.find('/')]
-    verzia_db = verzia_help[verzia_help.find('/')+1:verzia_help.rfind('/')]
+    version_core = version_help[7:version_help.find('/')]
+    version_db = version_help[version_help.find('/')+1:version_help.rfind('/')]
 
     lcd.move_cursor(3, 0)
-    lcd.print(verzia_core)
+    lcd.print(version_core)
 
     lcd.move_cursor(3, 15)
-    lcd.print(verzia_db)
+    lcd.print(version_db)
 
 update()
 draw()
