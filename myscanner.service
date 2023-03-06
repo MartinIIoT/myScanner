@@ -1,0 +1,14 @@
+[Unit]
+Description=myScanner
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/myScanner/myscanner.py
+WorkingDirectory=/home/pi/myScanner
+StandardOutput=inherit
+StandardInput=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
