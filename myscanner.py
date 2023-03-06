@@ -18,7 +18,7 @@ update_refresh_time = 30 # in seconds
 update_time_temp = update_refresh_time
 start_update = 1800 # in seconds (1800s = 30min)
 
-# Save last update timestamp to last_update.conf
+# Save last update timestamp to ./last_update.conf
 def saveLastUpdate():
     lcd.clear()
     with open('./last_update.conf', 'w') as f:
