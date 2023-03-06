@@ -7,14 +7,16 @@ import os
 lcd = i2clcd.i2clcd(i2c_bus=1, i2c_addr=0x27, lcd_width=20)
 lcd.init()
 
-usb_kluc = 0
-usb_cesta = "/dev/sda1"
-usb_file_cesta = "/home/pi/myScanner/myUSB/"
+usb_key = 0
+usb_path = "/dev/sda1"
+usb_file_path = "/home/pi/myScanner/myUSB/"
 usb_scanned = False
-cas_aktualizacie = 30 # v sekundach
-cas_aktualizacie_temp = cas_aktualizacie
+update_time = 30 # in seconds
+update_time_temp = update_time
 
-def aktualizuj():
+
+
+def update():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
     
@@ -33,34 +35,33 @@ def aktualizuj():
         return False
 
 
-def hladaj_kluc():
-    global usb_kluc
+def find_usb():
+    global usb_key
     global usb_scanned
 
-    if os.path.exists(usb_cesta) and usb_kluc == 0:
+    if os.path.exists(usb_path) and usb_key == 0:
         try:
-            subprocess.check_output("sudo mount " + usb_cesta + " " + usb_file_cesta, shell=True)
-            #subprocess.run(['sudo', 'mount', usb_cesta, usb_file_cesta])
-            usb_kluc = 1
+            subprocess.check_output("sudo mount " + usb_path + " " + usb_file_path, shell=True)
+            usb_key = 1
             print("Mount OK")
             time.sleep(1)
         except subprocess.CalledProcessError:
             print("Mount Err")
-            usb_kluc = 0
+            usb_key = 0
 
         lcd.move_cursor(1, 0)
         lcd.print("USB [X]")
         time.sleep(1)
         return True
-    elif not(os.path.exists(usb_cesta)) and usb_kluc == 1:
+    elif not(os.path.exists(usb_path)) and usb_key == 1:
         lcd.print_line('', line=2, align='CENTER')
         lcd.move_cursor(1, 0)
         lcd.print("USB [ ]")
-        usb_kluc = 0
+        usb_key = 0
         usb_scanned = False
         return False
 
-def vykreslit():
+def draw():
     lcd.print_line('===  MartinIIoT  ===', line=0, align='CENTER')
     lcd.move_cursor(1, 0)
     lcd.print("USB [ ]")
@@ -79,25 +80,23 @@ def vykreslit():
     lcd.move_cursor(3, 15)
     lcd.print(verzia_db)
 
-aktualizuj()
-vykreslit()
+update()
+draw()
 
 while True:
-    if cas_aktualizacie_temp > 0:
-        if hladaj_kluc() and not(usb_scanned):
+    if update_time_temp > 0:
+        if find_usb() and not(usb_scanned):
             usb_scanned = True
             lcd.move_cursor(1, 12)
             lcd.print('SCAN [X]')
             lcd.print_line('SCANNING', line=2, align='CENTER')
-            #subprocess.run(['clamscan', '-r', '-i', usb_cesta], stdout=subprocess.PIPE)
-            subprocess.run(['clamscan', '-r', '-i', usb_file_cesta])
+            subprocess.run(['clamscan', '-r', '-i', usb_file_path])
             lcd.move_cursor(1, 12)
             lcd.print('SCAN [ ]')
             
-            if usb_kluc == 1:
+            if usb_key == 1:
                 try:
-                    subprocess.check_output("sudo umount " + usb_file_cesta, shell=True)
-                    #subprocess.run(['sudo', 'umount', usb_file_cesta])
+                    subprocess.check_output("sudo umount " + usb_file_path, shell=True)
                     print("Unmount OK")
                 except subprocess.CalledProcessError:
                     print("Unmount Err")
@@ -105,9 +104,9 @@ while True:
             lcd.print_line('SCAN DONE!', line=2, align='CENTER')
             time.sleep(5)
             lcd.print_line('REMOVE USB', line=2, align='CENTER')
-        cas_aktualizacie_temp -= 1
+        update_time_temp -= 1
         time.sleep(1)
     else:
-        aktualizuj()
-        vykreslit()
-        cas_aktualizacie_temp = cas_aktualizacie
+        update()
+        draw()
+        update_time_temp = update_time
