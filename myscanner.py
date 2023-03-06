@@ -14,19 +14,39 @@ usb_scanned = False
 update_time = 30 # in seconds
 update_time_temp = update_time
 
+def clamav_update():
+    lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
+    lcd.print_line('STOP ClamAV', line=2, align='CENTER')
+    subprocess.run(['sudo', 'systemctl', 'stop', 'clamav-freshclam'])
+    lcd.print_line('UPDATE ClamAV', line=2, align='CENTER')
+    subprocess.run(['sudo', 'freshclam'])
+    lcd.print_line('START ClamAV', line=2, align='CENTER')
+    subprocess.run(['sudo', 'systemctl', 'start', 'clamav-freshclam'])
+    lcd.clear()
 
+def update_os():
+    lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
+    lcd.print_line('GET OS UPDATE', line=2, align='CENTER')
+    subprocess.run(['sudo', 'apt', 'update'])
+    lcd.print_line('OS UPDATING', line=2, align='CENTER')
+    subprocess.run(['sudo', 'apt', 'full-upgrade', '-y'])
+    lcd.print_line('CLEAN OS', line=2, align='CENTER')
+    subprocess.run(['sudo', 'apt', 'autoremove', '--purge', '-y'])
+    lcd.clear()
+    
 
 def update_main():
     lcd.clear()
     lcd.print_line('CHECK UPDATE', line=0, align='CENTER')
-    
+
     try:
         
         urllib.request.urlopen('https://google.com', timeout=5) #Python 3.x
         lcd.print_line(':::  ONLINE  :::', line=2, align='CENTER')
         lcd.print_line('UPDATING', line=3, align='CENTER')
-        subprocess.run(['./update.sh'])
         lcd.clear()
+        update_os()
+        clamav_update()
         return True
     except:
         lcd.print_line('...  OFFLINE  ...', line=2, align='CENTER')
