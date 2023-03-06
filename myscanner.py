@@ -17,9 +17,16 @@ update_time_temp = update_time
 def saveLastUpdate():
     with open('./last_update.conf', 'w') as f:
         lcd.print_line('SAVE LAST UPDATE', line=2, align='CENTER')
-        data = str(time.time())
-        f.write(data)
+        dateTime_now = str(time.time())
+        f.write(dateTime_now)
         lcd.clear()
+
+def readLastUpdate():
+    with open('./last_update.conf', 'r') as f:
+        lcd.print_line('READ LAST UPDATE', line=2, align='CENTER')
+        dateTime_old = float(f.read())
+        dateTime_now = time.time()
+
 
 
 def clamav_update():
