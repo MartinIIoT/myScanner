@@ -12,12 +12,13 @@ lcd = i2clcd.i2clcd(i2c_bus=1, i2c_addr=0x27, lcd_width=20)
 lcd.init()
 
 USB_KEY = 0
-USB_PATH = "/dev/sda1" # Where is USB
-USB_FILE_PATH = "/home/pi/myScanner/myUSB/" # Mount point for USB
+USB_PATH = "/dev/sda1"  # Where is USB
+USB_FILE_PATH = "/home/pi/myScanner/myUSB/"  # Mount point for USB
 USB_SCANNED = False
-UPDATE_REFRESH_TIME = 30 # in seconds
+UPDATE_REFRESH_TIME = 30  # in seconds
 UPDATE_TIME_TEMP = UPDATE_REFRESH_TIME
-START_UPDATE = 1800 # in seconds (1800s = 30min)
+START_UPDATE = 1800  # in seconds (1800s = 30min)
+
 
 # Save last update timestamp to ./last_update.conf
 def save_last_update():
@@ -27,6 +28,7 @@ def save_last_update():
         date_time_now = str(time.time())
         my_file.write(date_time_now)
         lcd.clear()
+
 
 # Read last timestamp update.
 # If is more as START_UPDATE variable then start update.
@@ -45,6 +47,7 @@ def read_last_update():
         clamav_update()
         save_last_update()
 
+
 # Update ClamAV definitions database
 def clamav_update():
     lcd.clear()
@@ -56,6 +59,7 @@ def clamav_update():
     lcd.print_line('START ClamAV', line=2, align='CENTER')
     subprocess.run(['sudo', 'systemctl', 'start', 'clamav-freshclam'], check=False)
     lcd.clear()
+
 
 # Update Ubuntu and clean Ubuntu after update
 def update_os():
@@ -69,6 +73,7 @@ def update_os():
     subprocess.run(['sudo', 'apt', 'autoremove', '--purge', '-y'], check=False)
     lcd.clear()
 
+
 # Main update function.
 # Check if have internet connection and if yes, start read_last_update()
 def update_main():
@@ -81,6 +86,7 @@ def update_main():
         time.sleep(1)
         lcd.clear()
         return False
+
 
 # Check if is USB present and if yes, mount it to ./myUSB/
 def find_usb():
@@ -101,7 +107,7 @@ def find_usb():
             USB_KEY = 0
             return False
 
-    if not(os.path.exists(USB_PATH)) and USB_KEY == 1:
+    if not os.path.exists(USB_PATH) and USB_KEY == 1:
         lcd.print_line('', line=2, align='CENTER')
         lcd.move_cursor(1, 0)
         lcd.print("USB [ ]")
@@ -110,6 +116,7 @@ def find_usb():
         return False
 
     return None
+
 
 # Draw main screen with ClamAV Core and definitions database versions
 def draw():
@@ -124,13 +131,14 @@ def draw():
     version_help = version_raw.stdout.decode('utf-8')
 
     version_core = version_help[7:version_help.find('/')]
-    version_db = version_help[version_help.find('/')+1:version_help.rfind('/')]
+    version_db = version_help[version_help.find('/') + 1:version_help.rfind('/')]
 
     lcd.move_cursor(3, 0)
     lcd.print(version_core)
 
     lcd.move_cursor(3, 15)
     lcd.print(version_db)
+
 
 # Initial run
 update_main()
