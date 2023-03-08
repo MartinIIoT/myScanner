@@ -35,7 +35,7 @@ You need [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-mo
 3. Check `python3` version with `python3 --version` command on Terminal. If you don't have installed python3, you must install it with `sudo apt install -y python3`.
 4. Install pip3 and git, if you don't have it with `sudo apt install -y python3-pip git-all` command.
 5. Clone git repo with `git clone https://github.com/MartinIIoT/myScanner/ ~/myScanner/` command.
-6. Goto `~/myScanner` folder with `cd ~/myScanner/` command and install packages with `python3 -m pip install -r requirements.txt` command.
+6. Goto `~/myScanner` folder with `cd ~/myScanner/` command. Install packages with `python3 -m pip install -r requirements.txt` command.
 7. Copy `myscanner.service` file to `/etc/systemd/system/` with `sudo cp ./myscanner.service /etc/systemd/system/` command.
 8. Run service with `sudo systemctl start myscanner.service` command.
 9. And get it to start on boot with `sudo systemctl enable myscanner.service` command.
