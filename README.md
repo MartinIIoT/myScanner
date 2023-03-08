@@ -31,7 +31,7 @@ You need [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-mo
 </div>
 
 
-### Licenses
+## Licenses
 
 * The GNU General Public License, version 3.0 or later
 * Raspberry Pi is a trademark of Raspberry Pi Ltd.
