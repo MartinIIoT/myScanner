@@ -1,5 +1,7 @@
 # myScanner
 
+![Pylama Workflow](https://github.com/MartinIIoT/myScanner/actions/workflows/pylama.yml/badge.svg)
+
 **myScanner** is small automatic USB drive antivirus scanner run on Raspberry Pi 4 with show informations and status on 20x4 I2C LCD display. On Raspberry Pi 4 runs Raspberry Pi OS Lite (64-bit) and ClamAV as antivirus.
 
 **Work in progress**
