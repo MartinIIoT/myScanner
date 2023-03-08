@@ -32,7 +32,7 @@ You need [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-mo
 
 1. You need install [Raspberry Pi OS Lite (64-bit)](https://www.raspberrypi.com/software/) to SD CARD
 2. Update OS with `sudo apt update` and `sudo apt full-upgrade --y`
-3. Check `python3` version with `python3 --version` command on Terminal. If you don't have installed python3, you must install it with `sudo apt install python3`.
+3. Check `python3` version with `python3 --version` command on Terminal. If you don't have installed python3, you must install it with `sudo apt install -y python3`.
 4. Install pip3 and git, if you don't have it with `sudo apt -y install python3-pip git-all` command.
 5. Clone git repo with `git clone https://github.com/MartinIIoT/myScanner/ ~/myScanner/` command.
 6. Goto `~/myScanner` folder with `cd ~/myScanner/` command and install packages with `python3 -m pip install -r requirements.txt` command.
