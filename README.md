@@ -9,10 +9,7 @@
 * [Motivation](#motivation)
 * [What you need](#what-you-need)
 * [Wiring](#wiring)
-* [Development](#development)
-  * [Requirements - Hardware](#requirements---hardware)
-  * [How to build](#dev-build)
-  * [Linter](#dev-linter)
+* [Install](#install)
 * [Licenses](#licenses)
 
 
