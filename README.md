@@ -27,7 +27,7 @@ You need [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-mo
 ## Wiring
 
 <div align="center" width="100%">
-    <img src="./wiring_diagram/wiring_diagram.png" height="450px" alt="" />
+    <img src="./wiring_diagram/wiring_diagram.png" height="450px" width="auto" alt="" />
 </div>
 
 
