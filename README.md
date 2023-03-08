@@ -10,6 +10,7 @@
 * [What you need](#what-you-need)
 * [Wiring](#wiring)
 * [Install](#install)
+* [Contribute](#contribute)
 * [Licenses](#licenses)
 
 
