@@ -15,7 +15,7 @@ python-apt==2.2.1
 python-prctl==1.8.1
 requests==2.28.2
 RPi.GPIO==0.7.1
-simplejpeg==1.6.5
+simplejpeg==1.6.6
 six==1.16.0
 smbus==1.1.post2
 spidev==3.6
