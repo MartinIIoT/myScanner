@@ -6,7 +6,7 @@ distro==1.8.0
 gpiozero==1.6.2
 i2clcd==0.0.1
 idna==3.4
-numpy==1.25.1
+numpy==1.25.2
 picamera2==0.3.12
 pidng==4.0.9
 piexif==1.1.3
