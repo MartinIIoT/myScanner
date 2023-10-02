@@ -1,6 +1,6 @@
 certifi==2023.7.22
 chardet==5.2.0
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
 colorzero==2.0
 distro==1.8.0
 gpiozero==1.6.2
