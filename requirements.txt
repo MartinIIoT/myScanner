@@ -22,4 +22,4 @@ spidev==3.6
 ssh-import-id==5.11
 toml==0.10.2
 urllib3==2.1.0
-v4l2-python3==0.3.2
+v4l2-python3==0.3.3
