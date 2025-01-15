@@ -7,7 +7,7 @@ gpiozero==2.0.1
 i2clcd==0.0.1
 idna==3.10
 numpy==2.2.1
-picamera2==0.3.23
+picamera2==0.3.24
 pidng==4.0.9
 piexif==1.1.3
 Pillow==11.1.0
