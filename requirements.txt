@@ -18,7 +18,7 @@ RPi.GPIO==0.7.1
 simplejpeg==1.8.2
 six==1.17.0
 smbus==1.1.post2
-spidev==3.6
+spidev==3.7
 ssh-import-id==5.11
 toml==0.10.2
 urllib3==2.3.0
